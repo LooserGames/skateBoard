@@ -70,6 +70,12 @@ crashlytics-build.properties
 InitTestScene*.unity.meta
 InitTestScene*.unity
 
+# JetBrains IDEA
+/.idea/
+
+#Temp unitylockfile
+SkateBoard/Temp/UnityLockfile
 
 # End of https://www.toptal.com/developers/gitignore/api/unity
-SkateBoard/Temp/UnityLockfile
+
+
