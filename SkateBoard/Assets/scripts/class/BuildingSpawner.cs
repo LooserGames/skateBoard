@@ -120,7 +120,7 @@ public class BuildingSpawner : MonoBehaviour
         if (LastRoad == null)
             SpawnRoad();
 
-        PlayerTransform = GameObject.Find("SkateBoard_animation (3)").transform;
+        PlayerTransform = GameObject.Find("player").transform;
         StartCoroutine(ClearPool());
 
         emptyObj = new GameObject("Empty"); // getting rid of null refence exception in methods

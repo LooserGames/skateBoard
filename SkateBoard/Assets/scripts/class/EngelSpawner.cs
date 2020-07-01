@@ -55,7 +55,7 @@ public class EngelSpawner : MonoBehaviour
             parkObstaclesParent = GameObject.Find("ParkObstacles");
         }
 
-        playerTransform = GameObject.Find("SkateBoard_animation (3)").transform;
+        playerTransform = GameObject.Find("player").transform;
         empty = new GameObject();
     }
 
