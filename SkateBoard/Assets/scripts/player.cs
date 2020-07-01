@@ -38,7 +38,7 @@ public class player : MonoBehaviour
     {
         myPlayer.MouseLeftRight(this.gameObject.transform,rb,directionSpeed,anim); 
         myPlayer.JumpFunc(rb,anim,this.transform);
-       // rb.MovePosition(rb.position+Vector3.forward*(moveSpeed*Time.deltaTime));
+        rb.MovePosition(rb.position+Vector3.forward*(moveSpeed*Time.deltaTime));
 
        
 
