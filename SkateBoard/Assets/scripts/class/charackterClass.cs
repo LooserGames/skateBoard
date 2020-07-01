@@ -1,16 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class charackterClass : MonoBehaviour
-{ 
-    public bool isGround=true; //isground true and false
-    public float treshold=9; //touch max pos
-   
-  
-    private bool movingLeft, movingRight;
+{
 
+    public float treshold=9;
+    
+    
+    
     /// <summary>
     /// General character controll class
     /// </summary>
@@ -18,7 +16,6 @@ public class charackterClass : MonoBehaviour
     
     
     //private
-    //touch pos controll
     float TouchControll()
     {
         float x=0;
@@ -36,7 +33,6 @@ public class charackterClass : MonoBehaviour
     }
     
     //public 
-    //player touch left rigt method
     public void LeftRight(Transform player, float unit)
     {
         float x = TouchControll();
@@ -52,7 +48,7 @@ public class charackterClass : MonoBehaviour
     }
 
  
-    //Animation methods
+
     public void AnimationPlay(Animator anim,int unit, string animName)
     {
         anim.SetInteger(animName,unit);
@@ -68,143 +64,36 @@ public class charackterClass : MonoBehaviour
         anim.SetFloat(animName,unet);
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-
-    
-    //jump method
-    public void JumpFunc(Rigidbody rb,Animator anim,Transform player)
-    {
-        float y = MouseYControll();
-        string obstacle = RayFunc(player);
-        Vector3 tempVelocity;
-        bool isStartUnit = anim.GetBool("isStart");
-        
-        if (y > 0.30f && isGround==true && obstacle!=null && !isStartUnit)
-        {
-            tempVelocity = rb.velocity;
-            tempVelocity.y = Mathf.Sqrt(1.3f * 2f * Physics.gravity.magnitude);
-            rb.velocity = tempVelocity;
-            isGround = false;
-            AnimationPlay(anim,isGround,"isGround");
-        }
-        
-        else if(rb.gameObject.transform.position.y<=0.10f)
-        {
-            isGround = true;
-            AnimationPlay(anim,isGround,"isGround");
-        }
-        
-        if (y > 0.30f && obstacle == null && isGround==true && !isStartUnit)
-        {
-            
-            tempVelocity = rb.velocity;
-            tempVelocity.y = Mathf.Sqrt(0.5f * 2f * Physics.gravity.magnitude);
-            rb.velocity = tempVelocity;
-            isGround = false;
-            AnimationPlay(anim,isGround,"isGround");
-        }
-        
-        else if(rb.gameObject.transform.position.y<=0)
-        {
-            isGround = true;
-            AnimationPlay(anim,isGround,"isGround");
-        }
-       
-    }
-
-   public string RayFunc(Transform player)
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(new Vector3(player.position.x,0.1f,player.position.z), player.forward, out hit, 3f))
-        {
-            return hit.transform.tag;
-        }
-
-        return null;
-    }
-    
+    int way=1;
    //test mouse function
-   public void MouseLeftRight(Transform player ,Rigidbody rb, float speed,Animator anim)
+   public void MouseLeftRight(Transform player,float unit)
    {
-       // burda mouse hareketlerine göre sağa ve sola gitme işlemlerini yapacak
        float x = MouseControll();
-       bool isStartUnit = anim.GetBool("isStart");
-
-       // mouse pozisyonunu aldık ve sağ sol değerleri true ve false yaptık
-       if (x > 0.7f  && !movingRight && isGround && !isStartUnit)
-       {
-          
-          
-           movingRight = true;
-           movingLeft = false;
-       }
-       if(x < 0.3f && !movingLeft && isGround && !isStartUnit)
-       {
-          
-          
-           movingRight = false;
-           movingLeft = true;
-       }
-
-       //burda eğer değerler true ise işlemleri yaptırıyoruz
-       if (movingRight && player.position.x<1)
-       {
-           rb.MovePosition(rb.position+speed*Time.deltaTime*Vector3.right);
-           AnimationPlay(anim,1.0f,"x");
-          
-       }
-       else
-       {
-           movingRight = false;
-           if (player.position.x > 1)
-           {
-               player.position = new Vector3(1,player.position.y,player.position.z);
-               AnimationPlay(anim,0.0f,"x");
-           }
-       }
        
-       if (movingLeft && player.position.x>-1 && !isStartUnit)
+
+       if (x > 0.5f && way==1)
        {
-           rb.MovePosition(rb.position+speed*Time.deltaTime*Vector3.left);
-           AnimationPlay(anim,-1.0f,"x");
+           player.position=new Vector3(unit,player.position.y,player.position.z);
+           way = 2;
        }
-       else
+       if(x < 0.5f && way==2)
        {
-           movingLeft = false;
-           if (player.position.x < -1)
-           {
-               player.position = new Vector3(-1,player.position.y,player.position.z);
-               AnimationPlay(anim,0.0f,"x");
-           }
+           player.position=new Vector3(-unit,player.position.y,player.position.z);
+           way = 1;
        }
 
       
    }
-//mouse x controll
+
    private float MouseControll()
    {
        float x=0.5f;
        if (Input.GetMouseButton(0))
        {
            x= Input.mousePosition.x/Screen.width;
-           //print(x);
+           print(x);
        }
        return x;
    }
-
-   //mouse y control for jump
-   public float MouseYControll()
-   {
-       
-       float y=0f;
-       if (Input.GetMouseButton(0))
-       {
-           y = Input.mousePosition.y / Screen.width;
-       }
-       return y;
-   }
     
 }
-
-
-
