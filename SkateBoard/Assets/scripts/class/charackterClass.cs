@@ -79,22 +79,22 @@ public class charackterClass : MonoBehaviour
         Vector3 tempVelocity;
         bool isStartUnit = anim.GetBool("isStart");
         
-        if (y > 0.30f && isGround==true && obstacle!=null && !isStartUnit)
+        if (y > 0.45f && isGround==true && obstacle!=null && !isStartUnit)
         {
             tempVelocity = rb.velocity;
-            tempVelocity.y = Mathf.Sqrt(1.3f * 2f * Physics.gravity.magnitude);
+            tempVelocity.y = Mathf.Sqrt(2f * 2f * Physics.gravity.magnitude);
             rb.velocity = tempVelocity;
             isGround = false;
             AnimationPlay(anim,isGround,"isGround");
         }
         
-        else if(rb.gameObject.transform.position.y<=0.10f)
+        else if(rb.gameObject.transform.position.y<=0.20f)
         {
             isGround = true;
             AnimationPlay(anim,isGround,"isGround");
         }
         
-        if (y > 0.30f && obstacle == null && isGround==true && !isStartUnit)
+        if (y > 0.45f && obstacle == null && isGround==true && !isStartUnit)
         {
             
             tempVelocity = rb.velocity;
@@ -104,7 +104,7 @@ public class charackterClass : MonoBehaviour
             AnimationPlay(anim,isGround,"isGround");
         }
         
-        else if(rb.gameObject.transform.position.y<=0)
+        else if(rb.gameObject.transform.position.y<=0.15f)
         {
             isGround = true;
             AnimationPlay(anim,isGround,"isGround");
@@ -115,7 +115,7 @@ public class charackterClass : MonoBehaviour
    public string RayFunc(Transform player)
     {
         RaycastHit hit;
-        if (Physics.Raycast(new Vector3(player.position.x,0.1f,player.position.z), player.forward, out hit, 3f))
+        if (Physics.Raycast(new Vector3(player.position.x,0.1f,player.position.z+0.7f), player.forward, out hit, 7f))
         {
             return hit.transform.tag;
         }
@@ -196,7 +196,7 @@ public class charackterClass : MonoBehaviour
    public float MouseYControll()
    {
        
-       float y=0f;
+       float y=0.0f;
        if (Input.GetMouseButton(0))
        {
            y = Input.mousePosition.y / Screen.width;
