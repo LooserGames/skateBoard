@@ -96,7 +96,7 @@ public class EngelSpawner : MonoBehaviour
         if (env == "City")
         {
             int a = Random.Range(0, cityObstaclePrefabs.Length);
-            Debug.Log("city " + a);
+            
             switch (a)
             {
                 case 0:
@@ -113,7 +113,7 @@ public class EngelSpawner : MonoBehaviour
         else if (env == "Park")
         {
             int a = Random.Range(0, parkObstaclePrefabs.Length);
-            Debug.Log("park " + a);
+           
             switch(a)
             {
                 case 0:

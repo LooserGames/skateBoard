@@ -10,11 +10,12 @@ public class player : MonoBehaviour
     private charackterClass myPlayer; //character class 
     private Rigidbody rb; // rigidbody component
     private Animator anim;
-    private bool isStartUnit;
+    private bool isStartUnit=true;
     private string objectTag;
     private bool isGrounded;
     private bool isDead;
     private Vector3 pos;
+    private bool deactiveTime;
     
 
     [SerializeField] private float directionSpeed;
@@ -25,7 +26,7 @@ public class player : MonoBehaviour
         myPlayer=new charackterClass(); // new character class 
         rb = GetComponent<Rigidbody>(); // gep player component
         anim = GetComponent<Animator>();
-        anim.SetBool("isStart",true);
+        anim.SetBool("isStart",isStartUnit);
         StartCoroutine(isStartStop());
         StartCoroutine(isJump());
         StartCoroutine(isMove());
@@ -39,8 +40,9 @@ public class player : MonoBehaviour
         myPlayer.MouseLeftRight(this.gameObject.transform,rb,directionSpeed,anim); 
         myPlayer.JumpFunc(rb,anim,this.transform);
         rb.MovePosition(rb.position+Vector3.forward*(moveSpeed*Time.deltaTime));
-
-       
+        
+        //Debug.DrawRay(new Vector3(transform.position.x,0.1f,transform.position.z+0.7f),transform.forward,Color.red,3f,true );
+       //print(Physics.gravity.magnitude);
 
     }
 
@@ -54,10 +56,11 @@ public class player : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         objectTag = myPlayer.RayFunc(this.transform);
+        print(objectTag);
         isGrounded = myPlayer.isGround;
         if (objectTag != null )
         {
-            if (objectTag == "notSlide" && !isGrounded)
+            if (objectTag == "notSlide" && !isGrounded && !deactiveTime)
             {
                 myPlayer.AnimationPlay(anim,0.1f,"y");
             }
@@ -65,23 +68,38 @@ public class player : MonoBehaviour
             {
                 myPlayer.AnimationPlay(anim,0.2f,"y");
             }
+            else if (objectTag == "rampa" && !isGrounded && !deactiveTime)
+            {
+                myPlayer.AnimationPlay(anim,0.1f,"y");
+            }
    
         }
         else if(objectTag==null && !isGrounded)
         {
-            myPlayer.AnimationPlay(anim,0.5f,"y");
+            if (!deactiveTime)
+            {
+                myPlayer.AnimationPlay(anim,0.5f,"y");
+            }
         }
         else
         {
-            myPlayer.AnimationPlay(anim,0,"y");
+            myPlayer.AnimationPlay(anim,0f,"y");
             
         }
         yield return isJump();
     }
 
+    IEnumerator DeactiveTime()
+    {
+        if (deactiveTime)
+        {
+            yield return new WaitForSeconds(2f);
+            deactiveTime = false;
+        }
+    }
     IEnumerator isDeadPlayer()
     {
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.3f);
         if (isDead)
         {
             moveSpeed = 0;
@@ -90,31 +108,40 @@ public class player : MonoBehaviour
     IEnumerator isMove()
     {
         yield return new WaitForSeconds(0.3f);
-        if (moveSpeed < 50)
+        if (moveSpeed < 20)
         {
             moveSpeed++;
             yield return isMove();
         }
         else
         {
-            moveSpeed = 50f;
+            moveSpeed = 20f;
         }
     }
 
     IEnumerator StartGame()
     {
-        yield return new WaitForSeconds(3f);
+        isStartUnit = true;
+        moveSpeed = 0;
+        yield return new WaitForSeconds(4f);
+        isDead = false;
+        anim.SetBool("isDead",isDead);
         StartCoroutine(isMove());
-        transform.position = new Vector3(pos.x,pos.y,pos.z+2);
+        transform.position = new Vector3(pos.x,pos.y,pos.z+5);
         StartCoroutine(PlayerStart());
         myPlayer.AnimationPlay(anim,0f,"y");
-        isDead = false;
+        myPlayer.AnimationPlay(anim,isStartUnit,"isStart");
+        StartCoroutine(isStartStop());
+
+
+
+
     }
 
     IEnumerator PlayerStart()
     {
         yield return new WaitForSeconds(0.3f);
-        if (moveSpeed <= 20f)
+        if (moveSpeed <= 10f)
         {
             GetComponentInChildren<SkinnedMeshRenderer>().enabled =
                 !GetComponentInChildren<SkinnedMeshRenderer>().enabled;
@@ -128,13 +155,13 @@ public class player : MonoBehaviour
         if (other.collider.tag == "slide")
         {
             myPlayer.AnimationPlay(anim,0.4f,"y");
+            deactiveTime = true;
         }
         if(other.collider.tag=="notSlide")
         {
             pos = transform.position;
             isDead = true;
-            anim.SetBool("isDead",true);
-            StartCoroutine(isDeadPlayer());
+            anim.SetBool("isDead",isDead);
             StartCoroutine(StartGame());
             
         }
@@ -145,67 +172,8 @@ public class player : MonoBehaviour
         if (other.collider.tag == "slide")
         {
             myPlayer.AnimationPlay(anim,0.3f,"y");
+            StartCoroutine(DeactiveTime());
+
         }
     }
-    
-    
-    
-    /*
-     public void MouseLeftRight(Transform player ,Rigidbody rb, float speed,Animator anim)
-   {
-       // burda mouse hareketlerine göre sağa ve sola gitme işlemlerini yapacak
-       float x = MouseControll();
-       bool isStartUnit = anim.GetBool("isStart");
-
-       // mouse pozisyonunu aldık ve sağ sol değerleri true ve false yaptık
-       if (x > 0.7f  && !movingRight && isGround && !isStartUnit)
-       {
-          
-          
-           movingRight = true;
-           movingLeft = false;
-       }
-       if(x < 0.3f && !movingLeft && isGround && !isStartUnit)
-       {
-          
-          
-           movingRight = false;
-           movingLeft = true;
-       }
-
-       //burda eğer değerler true ise işlemleri yaptırıyoruz
-       if (movingRight && player.position.x<1)
-       {
-           rb.MovePosition(rb.position+speed*Time.deltaTime*Vector3.right);
-           AnimationPlay(anim,1.0f,"x");
-          
-       }
-       else
-       {
-           movingRight = false;
-           if (player.position.x > 1)
-           {
-               player.position = new Vector3(1,player.position.y,player.position.z);
-               AnimationPlay(anim,0.0f,"x");
-           }
-       }
-       
-       if (movingLeft && player.position.x>-1 && !isStartUnit)
-       {
-           rb.MovePosition(rb.position+speed*Time.deltaTime*Vector3.left);
-           AnimationPlay(anim,-1.0f,"x");
-       }
-       else
-       {
-           movingLeft = false;
-           if (player.position.x < -1)
-           {
-               player.position = new Vector3(-1,player.position.y,player.position.z);
-               AnimationPlay(anim,0.0f,"x");
-           }
-       }
-
-      
-   }
-     */
 }
