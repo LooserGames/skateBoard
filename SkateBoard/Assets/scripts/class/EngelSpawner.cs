@@ -20,7 +20,7 @@ public class EngelSpawner : MonoBehaviour
     private int stage = 1;
     
     [SerializeField]
-    private GameObject L_lastObstacle, R_lastObstacle;
+    private GameObject L_lastObstacle, R_lastObstacle, M_lastObstacle;
 
     private GameObject empty;
 
@@ -38,6 +38,7 @@ public class EngelSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(ClearPool());
         if(!GameObject.Find("CityObstacles"))
         {
             cityObstaclesParent = new GameObject("CityObstacles");
@@ -70,6 +71,11 @@ public class EngelSpawner : MonoBehaviour
             {
                 SpawnObstacle("Right");
             }
+            
+            if (M_lastObstacle.transform.position.z < playerTransform.position.z + 50f)
+            {
+                SpawnObstacle("Middle");
+            }
     }
 
     private void SpawnObstacle(string direction)
@@ -79,8 +85,12 @@ public class EngelSpawner : MonoBehaviour
         Vector3 spawnPoint;
         if (direction == "Left")
             spawnPoint = L_lastObstacle.transform.position + new Vector3(0f, 0f, L_lastObstacle.GetComponent<MeshRenderer>().bounds.extents.z + Random.Range(50f, 100f));
-        else
+        else if(direction=="Right")
             spawnPoint = R_lastObstacle.transform.position + new Vector3(0f, 0f, R_lastObstacle.GetComponent<MeshRenderer>().bounds.extents.z + Random.Range(50f, 100f));
+        else
+            spawnPoint = M_lastObstacle.transform.position + new Vector3(0f, 0f, M_lastObstacle.GetComponent<MeshRenderer>().bounds.extents.z + Random.Range(50f, 100f));
+
+        
         if (spawnPoint.z < cityEndingPoint && spawnPoint.z > cityBeginningPoint)
         {
             env = "City";
@@ -131,14 +141,21 @@ public class EngelSpawner : MonoBehaviour
         {
             if (direction == "Left")
             {
-                objToSpawn.transform.position = new Vector3(1, 0, L_lastObstacle.transform.position.z + Random.Range(50f, 100f));
+                objToSpawn.transform.position = new Vector3(0, 0, L_lastObstacle.transform.position.z + Random.Range(50f, 100f));
                 if (Mathf.Abs(R_lastObstacle.transform.position.z - objToSpawn.transform.position.z) < 25f)
                     objToSpawn.transform.position += Vector3.forward * (25f - Mathf.Abs(R_lastObstacle.transform.position.z - objToSpawn.transform.position.z));
                 L_lastObstacle = objToSpawn;
             }
+            if (direction == "Middle")
+            {
+                objToSpawn.transform.position = new Vector3(2, 0, M_lastObstacle.transform.position.z + Random.Range(50f, 100f));
+                if (Mathf.Abs(R_lastObstacle.transform.position.z - objToSpawn.transform.position.z) < 25f)
+                    objToSpawn.transform.position += Vector3.forward * (25f - Mathf.Abs(R_lastObstacle.transform.position.z - objToSpawn.transform.position.z));
+                M_lastObstacle = objToSpawn;
+            }
             if (direction == "Right")
             {
-                objToSpawn.transform.position = new Vector3(-1, 0, R_lastObstacle.transform.position.z + Random.Range(50f, 100f));
+                objToSpawn.transform.position = new Vector3(4, 0, R_lastObstacle.transform.position.z + Random.Range(50f, 100f));
 
                 if (Mathf.Abs(L_lastObstacle.transform.position.z - objToSpawn.transform.position.z) < 25f)
                     objToSpawn.transform.position += Vector3.forward * (25f - Mathf.Abs(L_lastObstacle.transform.position.z - objToSpawn.transform.position.z));
@@ -149,14 +166,21 @@ public class EngelSpawner : MonoBehaviour
         {
             if (direction == "Left")
             {
-                objToSpawn.transform.position = new Vector3(1, 0, L_lastObstacle.transform.position.z + Random.Range(50f, 100f));
+                objToSpawn.transform.position = new Vector3(0, 0, L_lastObstacle.transform.position.z + Random.Range(50f, 100f));
                 if (Mathf.Abs(R_lastObstacle.transform.position.z - objToSpawn.transform.position.z) < 25f)
                     objToSpawn.transform.position += Vector3.forward * (25f - Mathf.Abs(R_lastObstacle.transform.position.z - objToSpawn.transform.position.z));
                 L_lastObstacle = objToSpawn;
             }
+            if (direction == "Middle")
+            {
+                objToSpawn.transform.position = new Vector3(2, 0, M_lastObstacle.transform.position.z + Random.Range(50f, 100f));
+                if (Mathf.Abs(R_lastObstacle.transform.position.z - objToSpawn.transform.position.z) < 25f)
+                    objToSpawn.transform.position += Vector3.forward * (25f - Mathf.Abs(R_lastObstacle.transform.position.z - objToSpawn.transform.position.z));
+                M_lastObstacle = objToSpawn;
+            }
             if (direction == "Right")
             {
-                objToSpawn.transform.position = new Vector3(-1, 0, R_lastObstacle.transform.position.z + Random.Range(50f, 100f));
+                objToSpawn.transform.position = new Vector3(4, 0, R_lastObstacle.transform.position.z + Random.Range(50f, 100f));
 
                 if (Mathf.Abs(L_lastObstacle.transform.position.z - objToSpawn.transform.position.z) < 25f)
                     objToSpawn.transform.position += Vector3.forward * (25f - Mathf.Abs(L_lastObstacle.transform.position.z - objToSpawn.transform.position.z));

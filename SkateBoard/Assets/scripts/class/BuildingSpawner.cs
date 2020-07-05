@@ -20,7 +20,7 @@ public class BuildingSpawner : MonoBehaviour
 
     private GameObject citySideObjParent , cityRoadsParent,parkSideObjParent,parkRoadsParent;
 
-    private float minBuildingSpacing=1f, maxBuildingSpacing=5f;
+    [Header("Test")][SerializeField]private float minBuildingSpacing=1f, maxBuildingSpacing=5f;
 
     private List<GameObject> cityMasterPool = new List<GameObject>(); // 
     private List<GameObject> parkMasterPool = new List<GameObject>(); // Master pools for deactivating objects in hierarchy easier

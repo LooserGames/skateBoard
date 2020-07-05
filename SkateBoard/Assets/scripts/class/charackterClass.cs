@@ -1,16 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+
 
 public class charackterClass : MonoBehaviour
 { 
     public bool isGround=true; //isground true and false
     public float treshold=9; //touch max pos
-   
-  
+    public bool isStartUnit=true;
+    public Vector3[] wayPos;
+    
     private bool movingLeft, movingRight;
-
+    
+    int currentWay = 0,targetWay=0;
     /// <summary>
     /// General character controll class
     /// </summary>
@@ -77,7 +81,7 @@ public class charackterClass : MonoBehaviour
         float y = MouseYControll();
         string obstacle = RayFunc(player);
         Vector3 tempVelocity;
-        bool isStartUnit = anim.GetBool("isStart");
+        
         
         if (y > 0.45f && isGround==true && obstacle!=null && !isStartUnit)
         {
@@ -124,7 +128,7 @@ public class charackterClass : MonoBehaviour
     }
     
    //test mouse function
-   public void MouseLeftRight(Transform player ,Rigidbody rb, float speed,Animator anim)
+   /*public void MouseLeftRight(Transform player ,Rigidbody rb, float speed,Animator anim)
    {
        // burda mouse hareketlerine göre sağa ve sola gitme işlemlerini yapacak
        float x = MouseControll();
@@ -133,15 +137,11 @@ public class charackterClass : MonoBehaviour
        // mouse pozisyonunu aldık ve sağ sol değerleri true ve false yaptık
        if (x > 0.7f  && !movingRight && isGround && !isStartUnit)
        {
-          
-          
            movingRight = true;
            movingLeft = false;
        }
        if(x < 0.3f && !movingLeft && isGround && !isStartUnit)
        {
-          
-          
            movingRight = false;
            movingLeft = true;
        }
@@ -177,9 +177,129 @@ public class charackterClass : MonoBehaviour
                AnimationPlay(anim,0.0f,"x");
            }
        }
-
-      
    }
+
+*/
+  /* public void MouseLeftRight(Transform player, Rigidbody rb, float speed, Animator anim)
+   {
+       float x = MouseControll();
+       bool isStartUnit = anim.GetBool("isStart");
+       int way = 0;
+      
+       
+       if (x > 0.7f  && !movingRight && isGround && !isStartUnit)
+       {
+           movingLeft = false;
+           movingRight = true;
+       }
+      
+       
+       if (x < 0.3f  && !movingRight && isGround && !isStartUnit)
+       {
+           movingLeft = true;
+           movingRight = false;
+           
+       }
+       
+       
+       if (player.position.x >= 0.0f && player.position.x <= 4.0f)
+       {
+           if (player.position.x>1.9f && player.position.x<2.1f && way!=1)
+           {
+               AnimationPlay(anim, 0f, "x");
+               rb.MovePosition(new Vector3(2f,player.position.y,player.position.z));
+               way = 1;
+           }
+          
+           
+           if (player.position.x>=0 && movingLeft)
+           {
+               rb.MovePosition(rb.position + speed *Time.deltaTime*Vector3.left);
+               if (player.position.x < 0)
+               {
+                   way = 0;
+               }
+               AnimationPlay(anim, -1.0f, "x");
+           }
+          
+
+           if (player.position.x<=4 && movingRight)
+           {
+               rb.MovePosition(rb.position+speed*Time.deltaTime*Vector3.right);
+               if (player.position.x > 4)
+               {
+                   way = 2;
+               }
+               AnimationPlay(anim, 1.0f, "x");
+           }
+           
+       }
+       else
+       {
+           movingLeft = false;
+           movingRight = false;
+           player.position = new Vector3(Mathf.Round(player.position.x), player.position.y, player.position.z);
+           AnimationPlay(anim, 0.0f, "x");
+       }
+     
+   }*/
+
+  public void MouseLeftRight(Transform player, Rigidbody rb, float speed, Animator anim)
+  {
+      float x = MouseControll();
+
+
+      if (!isStartUnit && isGround)
+      {
+          if (currentWay != 2)
+          {
+              if (x >= 0.7f && targetWay < 2f && Mathf.Abs(currentWay-targetWay)==0)
+              {
+                  targetWay++;
+              }
+          }
+
+          if (currentWay != 0)
+          {
+              if (x <= 0.3f && targetWay > 0f && Mathf.Abs(currentWay-targetWay)==0)
+              {
+                  targetWay--;
+              }
+          }
+
+          targetWay = Mathf.Clamp(targetWay, 0, 2);
+
+          if (Mathf.Abs(player.position.x - wayPos[targetWay].x) > 0.1f)
+          {
+              if (player.position.x<wayPos[targetWay].x)
+              {
+                  rb.MovePosition(rb.position+speed*Time.deltaTime*Vector3.right);
+                  AnimationPlay(anim, 1.0f, "x");
+              }
+
+              if (player.position.x > wayPos[targetWay].x)
+              {
+                  rb.MovePosition(rb.position+speed*Time.deltaTime*Vector3.left);
+                  AnimationPlay(anim, -1.0f, "x");
+              }
+          }
+          if (Mathf.Abs(player.position.x - wayPos[targetWay].x) <= 0.1f)
+          {
+              currentWay = targetWay;
+              player.position=new Vector3(wayPos[targetWay].x,player.position.y,player.position.z);
+              AnimationPlay(anim, 0.0f, "x");
+          }
+          
+      }
+  }
+
+public void WayObjects()
+  {
+      //wayPos[0] = transform.Find("left").position;
+     // wayPos[1] = transform.Find("midle").position;
+      //wayPos[2] = transform.Find("right").position;
+  }
+
 //mouse x controll
    private float MouseControll()
    {
