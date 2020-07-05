@@ -16,6 +16,7 @@ public class player : MonoBehaviour
     private bool isDead;
     private Vector3 pos;
     private bool deactiveTime;
+    [SerializeField] private Vector3[] wayPos;
     
 
     [SerializeField] private float directionSpeed;
@@ -30,8 +31,9 @@ public class player : MonoBehaviour
         StartCoroutine(isStartStop());
         StartCoroutine(isJump());
         StartCoroutine(isMove());
+        myPlayer.WayObjects();
+        myPlayer.wayPos=wayPos;
 
-        
     }
 
     // Update is called once per frame
@@ -50,6 +52,7 @@ public class player : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         anim.SetBool("isStart",false);
+        myPlayer.isStartUnit = false;
     }
 
     IEnumerator isJump()
@@ -122,6 +125,7 @@ public class player : MonoBehaviour
     IEnumerator StartGame()
     {
         isStartUnit = true;
+        myPlayer.isStartUnit = true;
         moveSpeed = 0;
         yield return new WaitForSeconds(4f);
         isDead = false;
