@@ -16,6 +16,9 @@ public class player : MonoBehaviour
     private bool isDead;
     private Vector3 pos;
     private bool deactiveTime;
+    private string isTag;
+    private bool isSlide;
+    
     [SerializeField] private Vector3[] wayPos;
     
 
@@ -43,6 +46,7 @@ public class player : MonoBehaviour
         myPlayer.JumpFunc(rb,anim,this.transform);
         rb.MovePosition(rb.position+Vector3.forward*(moveSpeed*Time.deltaTime));
         
+        
         //Debug.DrawRay(new Vector3(transform.position.x,0.1f,transform.position.z+0.7f),transform.forward,Color.red,3f,true );
        //print(Physics.gravity.magnitude);
 
@@ -59,29 +63,36 @@ public class player : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         objectTag = myPlayer.RayFunc(this.transform);
-        print(objectTag);
         isGrounded = myPlayer.isGround;
-        if (objectTag != null )
+        if (isTag != null )
         {
-            if (objectTag == "notSlide" && !isGrounded && !deactiveTime)
+            if (isTag == "nonSlide" && !isGrounded && !deactiveTime)
             {
-                myPlayer.AnimationPlay(anim,0.1f,"y");
+                myPlayer.AnimationPlay(anim,1f,"y");
+                
             }
-            else if (objectTag == "slide" && !isGrounded)
+            else if (isTag == "isSlide" && !isGrounded)
             {
-                myPlayer.AnimationPlay(anim,0.2f,"y");
+                myPlayer.AnimationPlay(anim,6f,"y");
+                anim.SetFloat("extra",1f,0.1f,Time.deltaTime*3);
             }
-            else if (objectTag == "rampa" && !isGrounded && !deactiveTime)
+            else if (isTag == "isRampa" && !isGrounded && !deactiveTime)
             {
-                myPlayer.AnimationPlay(anim,0.1f,"y");
+                myPlayer.AnimationPlay(anim,1f,"y");
+            }
+            
+            if (isSlide)
+            {
+                myPlayer.AnimationPlay(anim,6f,"y");
+                anim.SetFloat("extra",2f,0.1f,Time.deltaTime*3);
             }
    
         }
-        else if(objectTag==null && !isGrounded)
+        else if(isTag==null && !isGrounded)
         {
             if (!deactiveTime)
             {
-                myPlayer.AnimationPlay(anim,0.5f,"y");
+                myPlayer.AnimationPlay(anim,2f,"y");
             }
         }
         else
@@ -111,7 +122,7 @@ public class player : MonoBehaviour
     IEnumerator isMove()
     {
         yield return new WaitForSeconds(0.3f);
-        if (moveSpeed < 20)
+        if (moveSpeed < 15)
         {
             moveSpeed++;
             yield return isMove();
@@ -151,6 +162,10 @@ public class player : MonoBehaviour
                 !GetComponentInChildren<SkinnedMeshRenderer>().enabled;
             yield return PlayerStart();
         }
+        else
+        {
+            GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+        }
     }
 
 
@@ -158,8 +173,10 @@ public class player : MonoBehaviour
     {
         if (other.collider.tag == "slide")
         {
-            myPlayer.AnimationPlay(anim,0.4f,"y");
+            isSlide = true;
+           
             deactiveTime = true;
+            
         }
         if(other.collider.tag=="notSlide")
         {
@@ -175,9 +192,33 @@ public class player : MonoBehaviour
     {
         if (other.collider.tag == "slide")
         {
-            myPlayer.AnimationPlay(anim,0.3f,"y");
+            myPlayer.AnimationPlay(anim,6f,"y");
+            anim.SetFloat("extra",3f,0.1f,Time.deltaTime*3);
             StartCoroutine(DeactiveTime());
+            GameObject.FindWithTag("isSlide").GetComponent<BoxCollider>().enabled = false;
+            isSlide = false;
 
+        }
+        else
+        {
+            GameObject.FindWithTag("isSlide").GetComponent<BoxCollider>().enabled = true;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag != null)
+        {
+            isTag = other.gameObject.tag;
+            print("Trigger " + isTag);
+        }
+    }
+    
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag != null)
+        {
+            isTag = null;
         }
     }
 }

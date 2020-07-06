@@ -271,23 +271,26 @@ public class charackterClass : MonoBehaviour
 
           if (Mathf.Abs(player.position.x - wayPos[targetWay].x) > 0.1f)
           {
-              if (player.position.x<wayPos[targetWay].x)
+              if (player.position.x < wayPos[targetWay].x)
               {
-                  rb.MovePosition(rb.position+speed*Time.deltaTime*Vector3.right);
-                  AnimationPlay(anim, 1.0f, "x");
+                  rb.MovePosition(rb.position + speed * Time.deltaTime * Vector3.right);
+                  //AnimationPlay(anim, 1.0f, "x");
+                  anim.SetFloat("x",1.0f,0.1f,Time.deltaTime);
               }
 
               if (player.position.x > wayPos[targetWay].x)
               {
                   rb.MovePosition(rb.position+speed*Time.deltaTime*Vector3.left);
-                  AnimationPlay(anim, -1.0f, "x");
+                  //AnimationPlay(anim, -1.0f, "x");
+                  anim.SetFloat("x",-1.0f,0.1f,Time.deltaTime);
               }
           }
           if (Mathf.Abs(player.position.x - wayPos[targetWay].x) <= 0.1f)
           {
               currentWay = targetWay;
               player.position=new Vector3(wayPos[targetWay].x,player.position.y,player.position.z);
-              AnimationPlay(anim, 0.0f, "x");
+              //AnimationPlay(anim, 0.0f, "x");
+              anim.SetFloat("x",0f,0.1f,Time.deltaTime);
           }
           
       }
