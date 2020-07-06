@@ -46,7 +46,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 4594099357593629870, guid: 2bef5b53b72c7ba44816f144ade5d3d2,
+  m_Motion: {fileID: -3129032581540992300, guid: 11690cf01b3fca5409022a5b165c4cad,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -112,7 +112,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 5624904326345664411, guid: 2bef5b53b72c7ba44816f144ade5d3d2,
+    m_Motion: {fileID: -1147199446517607068, guid: 11690cf01b3fca5409022a5b165c4cad,
       type: 3}
     m_Threshold: -1
     m_Position: {x: -1, y: 0}
@@ -121,16 +121,16 @@ BlendTree:
     m_DirectBlendParameter: x
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 6517714258327031822, guid: 2bef5b53b72c7ba44816f144ade5d3d2,
+    m_Motion: {fileID: -4158892538556607495, guid: 11690cf01b3fca5409022a5b165c4cad,
       type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 0.5
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: x
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 1602509858112578346, guid: 2bef5b53b72c7ba44816f144ade5d3d2,
+    m_Motion: {fileID: -4092442845545992687, guid: 11690cf01b3fca5409022a5b165c4cad,
       type: 3}
     m_Threshold: 1
     m_Position: {x: 1, y: 0}
@@ -144,6 +144,48 @@ BlendTree:
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 1
+  m_BlendType: 0
+--- !u!206 &-2464199499221610998
+BlendTree:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: extraJampBlend
+  m_Childs:
+  - serializedVersion: 2
+    m_Motion: {fileID: -6380596145225930727, guid: 11690cf01b3fca5409022a5b165c4cad,
+      type: 3}
+    m_Threshold: 1
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: x
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -941451545410704578, guid: 11690cf01b3fca5409022a5b165c4cad,
+      type: 3}
+    m_Threshold: 2
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: x
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 1495061398480039707, guid: 11690cf01b3fca5409022a5b165c4cad,
+      type: 3}
+    m_Threshold: 3
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: x
+    m_Mirror: 0
+  m_BlendParameter: extra
+  m_BlendParameterY: x
+  m_MinThreshold: 1
+  m_MaxThreshold: 3
+  m_UseAutomaticThresholds: 0
+  m_NormalizedBlendValues: 0
   m_BlendType: 0
 --- !u!1102 &-1903544984753296581
 AnimatorState:
@@ -166,8 +208,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -8909159074999440836, guid: 2bef5b53b72c7ba44816f144ade5d3d2,
-    type: 3}
+  m_Motion: {fileID: -83682700788513401, guid: 11690cf01b3fca5409022a5b165c4cad, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -217,31 +258,37 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: y
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: isStart
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: isDead
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: isGround
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 1
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
+  - m_Name: extra
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -420,54 +467,35 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 5539831331247536789, guid: 2bef5b53b72c7ba44816f144ade5d3d2,
+    m_Motion: {fileID: 6454790652339489630, guid: 11690cf01b3fca5409022a5b165c4cad,
       type: 3}
-    m_Threshold: 0.1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: x
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 3727197314941292235, guid: 2bef5b53b72c7ba44816f144ade5d3d2,
-      type: 3}
-    m_Threshold: 0.2
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 5
-    m_CycleOffset: 0
-    m_DirectBlendParameter: x
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: -3512424137788609744, guid: 2bef5b53b72c7ba44816f144ade5d3d2,
-      type: 3}
-    m_Threshold: 0.3
-    m_Position: {x: 0, y: 0}
+    m_Threshold: 1
+    m_Position: {x: 0, y: 0.1}
     m_TimeScale: 0.5
     m_CycleOffset: 0
     m_DirectBlendParameter: x
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 5656249047949852774, guid: 2bef5b53b72c7ba44816f144ade5d3d2,
+    m_Motion: {fileID: 1294096614170539369, guid: 11690cf01b3fca5409022a5b165c4cad,
       type: 3}
-    m_Threshold: 0.4
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 5
+    m_Threshold: 2
+    m_Position: {x: 0, y: 0.5}
+    m_TimeScale: 2
     m_CycleOffset: 0
     m_DirectBlendParameter: x
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -652098631250243144, guid: 2bef5b53b72c7ba44816f144ade5d3d2,
-      type: 3}
-    m_Threshold: 0.5
+    m_Motion: {fileID: -2464199499221610998}
+    m_Threshold: 6
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 2
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: x
     m_Mirror: 0
   m_BlendParameter: y
   m_BlendParameterY: x
-  m_MinThreshold: 0.1
-  m_MaxThreshold: 0.5
+  m_MinThreshold: 1
+  m_MaxThreshold: 6
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0

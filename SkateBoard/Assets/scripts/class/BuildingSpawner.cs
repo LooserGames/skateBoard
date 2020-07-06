@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BuildingSpawner : MonoBehaviour
 {
-    private float sightDistance = 150f;
+    private float sightDistance = 300f;
     public GameObject cityRoadPrefab,parkRoadPrefab;
     [SerializeField]
     public GameObject[] citySideObjects,parkSideObjects;
@@ -116,7 +116,7 @@ public class BuildingSpawner : MonoBehaviour
         }
         #endregion
        
-        SetBeginningPoint(0);
+        SetBeginningPoint(-cityRoadPrefab.GetComponent<MeshRenderer>().bounds.extents.z);
         if (LastRoad == null)
             SpawnRoad();
 
@@ -130,6 +130,7 @@ public class BuildingSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        print(cityRoadPrefab.GetComponent<MeshRenderer>().bounds.extents.z);
         if(L_lastSideObject!= null)
         {
             if(L_lastSideObject.transform.position.z < sightDistance + PlayerTransform.position.z)
@@ -446,7 +447,7 @@ public class BuildingSpawner : MonoBehaviour
         {
             city = false;
             cityBeginningPoint = zposition;
-            cityEndingPoint = zposition + cityRoadPrefab.GetComponent<MeshRenderer>().bounds.extents.z * 2 * 8;
+            cityEndingPoint = zposition + cityRoadPrefab.GetComponent<MeshRenderer>().bounds.extents.z * 2 * 8*cityRoadPrefab.transform.localScale.z;
             parkBeginningPoint = cityEndingPoint;
             EngelSpawner.instance.cityBeginningPoint = cityBeginningPoint;
             EngelSpawner.instance.cityEndingPoint = cityEndingPoint;
@@ -456,7 +457,7 @@ public class BuildingSpawner : MonoBehaviour
         {
             park = false;
             parkBeginningPoint = zposition;
-            parkEndingPoint = zposition + cityRoadPrefab.GetComponent<MeshRenderer>().bounds.extents.z * 2 * 4;
+            parkEndingPoint = zposition + cityRoadPrefab.GetComponent<MeshRenderer>().bounds.extents.z * 2 * 4*cityRoadPrefab.transform.localScale.z;
             cityBeginningPoint = parkEndingPoint;
             EngelSpawner.instance.parkBeginningPoint = parkBeginningPoint;
             EngelSpawner.instance.parkEndingPoint = parkEndingPoint;
